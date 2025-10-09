@@ -156,7 +156,7 @@ class DM_StructuredData_AdminPage {
                 wp_send_json_error('Could not find fetch step in flow configuration.');
             }
             
-            do_action('dm_update_flow_handler', $fetch_step_id, 'wordpress_fetch', [
+            do_action('dm_update_flow_handler', $fetch_step_id, 'wordpress_posts', [
                 'post_id' => $post_id
             ]);
             
@@ -306,7 +306,7 @@ class DM_StructuredData_AdminPage {
                 
                 foreach ($post_ids as $post_id) {
                     // Configure WordPress fetch handler for each post
-                    do_action('dm_update_flow_handler', $fetch_step_id, 'wordpress_fetch', [
+                    do_action('dm_update_flow_handler', $fetch_step_id, 'wordpress_posts', [
                         'post_id' => $post_id
                     ]);
                     

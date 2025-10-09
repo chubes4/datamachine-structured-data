@@ -1,10 +1,9 @@
 <?php
 /**
- * Structured Data Handler for Data Machine Integration
- * 
- * Processes AI tool calls for semantic content analysis and manages
- * storage of semantic metadata in WordPress post meta. Handles content
- * hash validation for detecting when analysis updates are needed.
+ * Semantic content analysis with WordPress post meta storage.
+ *
+ * Processes AI tool calls for semantic classification and manages metadata
+ * with content hash validation for update detection.
  */
 
 if (!defined('ABSPATH')) {
@@ -12,19 +11,15 @@ if (!defined('ABSPATH')) {
 }
 
 class DM_StructuredData_Handler {
-    
+
     /**
-     * Process AI tool call for semantic analysis
-     * 
-     * Called by Data Machine publish step with AI tool parameters and tool definition.
-     * Extracts post context from parameters and stores semantic metadata to WordPress post meta.
-     * 
+     * Process AI tool call for semantic analysis.
+     *
      * @param array $parameters AI tool parameters with semantic classifications
-     * @param array $tool_def Tool definition from Data Machine (contains class, method, handler info)
+     * @param array $tool_def Tool definition from Data Machine
      * @return array Result with success status, message, and data
      */
     public function handle_tool_call($parameters, $tool_def = []) {
-        // Extract post ID using multiple strategies from parameters and tool definition
         $post_id = $this->extract_post_id_from_context($parameters, $tool_def);
         
         if (!$post_id) {
@@ -92,11 +87,10 @@ class DM_StructuredData_Handler {
     }
     
     /**
-     * Extract post ID from tool parameters following established pattern
-     * 
-     * The Update step provides original_id from data packet metadata.
-     * This follows the single, established pattern from Data Machine.
-     * 
+     * Extract post ID from tool parameters.
+     *
+     * Update step provides original_id from data packet metadata.
+     *
      * @param array $parameters Tool call parameters from Update step
      * @param array $tool_def Tool definition with handler config
      * @return int|null Post ID or null if not found

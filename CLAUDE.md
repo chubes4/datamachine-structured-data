@@ -2,6 +2,8 @@
 
 AI-powered semantic analysis extension for Data Machine that enhances WordPress structured data through automated content classification and Yoast SEO integration.
 
+**Version**: 1.0.0
+
 ## Architecture Overview
 
 The plugin extends Data Machine's pipeline system with semantic content analysis capabilities that automatically classify WordPress content and inject AI-enriched properties into Yoast-generated schema markup.

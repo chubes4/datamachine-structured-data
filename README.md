@@ -314,7 +314,7 @@ if (class_exists('DM_StructuredData_Handler')) {
    $fetch_step_id = $pipeline_service->get_flow_step_id('fetch');
    
    // Configure for specific post
-   do_action('dm_update_flow_handler', $fetch_step_id, 'wordpress_fetch', [
+   do_action('dm_update_flow_handler', $fetch_step_id, 'wordpress_posts', [
        'post_id' => $post_id
    ]);
    
