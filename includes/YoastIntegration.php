@@ -11,7 +11,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-class DM_StructuredData_YoastIntegration {
+class DataMachineStructuredData_YoastIntegration {
     
     /**
      * Initialize Yoast integration hooks
@@ -37,13 +37,13 @@ class DM_StructuredData_YoastIntegration {
         
         $post_id = $this->get_post_id_from_context($context);
         
-        do_action('dm_log', 'debug', 'Yoast Integration: Attempting schema enhancement', [
+        do_action('datamachine_log', 'debug', 'Yoast Integration: Attempting schema enhancement', [
             'post_id' => $post_id,
             'context_type' => is_object($context) ? get_class($context) : gettype($context)
         ]);
         
         if (!$post_id || !DM_StructuredData_Handler::has_structured_data($post_id)) {
-            do_action('dm_log', 'debug', 'Yoast Integration: No structured data found', [
+            do_action('datamachine_log', 'debug', 'Yoast Integration: No structured data found', [
                 'post_id' => $post_id,
                 'has_data' => $post_id ? DM_StructuredData_Handler::has_structured_data($post_id) : false
             ]);
@@ -53,14 +53,14 @@ class DM_StructuredData_YoastIntegration {
         $structured_data = DM_StructuredData_Handler::get_structured_data($post_id);
         
         if (empty($structured_data)) {
-            do_action('dm_log', 'debug', 'Yoast Integration: Empty structured data', [
+            do_action('datamachine_log', 'debug', 'Yoast Integration: Empty structured data', [
                 'post_id' => $post_id,
                 'data' => $structured_data
             ]);
             return $graph;
         }
         
-        do_action('dm_log', 'info', 'Yoast Integration: Enhancing schema with AI data', [
+        do_action('datamachine_log', 'info', 'Yoast Integration: Enhancing schema with AI data', [
             'post_id' => $post_id,
             'data_keys' => array_keys($structured_data)
         ]);

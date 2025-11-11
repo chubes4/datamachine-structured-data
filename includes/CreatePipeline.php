@@ -10,7 +10,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-class DM_StructuredData_CreatePipeline {
+class DataMachineStructuredData_CreatePipeline {
     
     /**
      * Create the structured data analysis pipeline using Data Machine's enhanced filter.
@@ -68,7 +68,7 @@ class DM_StructuredData_CreatePipeline {
             ];
 
             // Create complete pipeline using Data Machine's unified system
-            $pipeline_id = apply_filters('dm_create_pipeline', null, $pipeline_data);
+            $pipeline_id = apply_filters('datamachine_create_pipeline', null, $pipeline_data);
 
             if (!$pipeline_id) {
                 return [
@@ -78,7 +78,7 @@ class DM_StructuredData_CreatePipeline {
             }
 
             // Get the created flow ID
-            $flows = apply_filters('dm_get_pipeline_flows', [], $pipeline_id);
+            $flows = apply_filters('datamachine_get_pipeline_flows', [], $pipeline_id);
             $flow_id = !empty($flows) ? $flows[0]['flow_id'] : null;
 
             if (!$flow_id) {
@@ -89,8 +89,8 @@ class DM_StructuredData_CreatePipeline {
             }
 
             // Store IDs for plugin reference
-            update_option('dm_structured_data_pipeline_id', $pipeline_id);
-            update_option('dm_structured_data_flow_id', $flow_id);
+            update_option('datamachine_structured_data_pipeline_id', $pipeline_id);
+            update_option('datamachine_structured_data_flow_id', $flow_id);
 
             return [
                 'success' => true,
@@ -113,7 +113,7 @@ class DM_StructuredData_CreatePipeline {
      * @return bool True if pipeline exists, false otherwise
      */
     public function pipeline_exists(): bool {
-        $pipelines = apply_filters('dm_get_pipelines', []);
+        $pipelines = apply_filters('datamachine_get_pipelines', []);
         foreach ($pipelines as $pipeline) {
             if ($pipeline['pipeline_name'] === 'Structured Data Analysis Pipeline') {
                 return true;
@@ -129,13 +129,13 @@ class DM_StructuredData_CreatePipeline {
      * @return string|null Flow step ID or null if not found
      */
     public function get_flow_step_id(string $step_type): ?string {
-        $flow_id = get_option('dm_structured_data_flow_id');
+        $flow_id = get_option('datamachine_structured_data_flow_id');
         if (!$flow_id) {
             return null;
         }
         
         // Get database services
-        $all_databases = apply_filters('dm_db', []);
+        $all_databases = apply_filters('datamachine_db', []);
         $db_flows = $all_databases['flows'] ?? null;
         
         if (!$db_flows) {

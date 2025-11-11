@@ -17,9 +17,9 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('DM_STRUCTURED_DATA_VERSION', '1.0.0');
-define('DM_STRUCTURED_DATA_PATH', plugin_dir_path(__FILE__));
-define('DM_STRUCTURED_DATA_URL', plugin_dir_url(__FILE__));
+define('DATAMACHINE_STRUCTURED_DATA_VERSION', '1.0.0');
+define('DATAMACHINE_STRUCTURED_DATA_PATH', plugin_dir_path(__FILE__));
+define('DATAMACHINE_STRUCTURED_DATA_URL', plugin_dir_url(__FILE__));
 
 /**
  * Main plugin class for Data Machine Structured Data Extension
@@ -28,7 +28,7 @@ define('DM_STRUCTURED_DATA_URL', plugin_dir_url(__FILE__));
  * initializes Yoast SEO integration for enhanced schema markup, and
  * provides admin interface with synchronous pipeline creation service.
  */
-class DM_StructuredData {
+class DataMachineStructuredData {
     
     /**
      * Initialize plugin hooks
@@ -43,17 +43,17 @@ class DM_StructuredData {
     public function init() {
         $this->load_includes();
         
-        add_filter('dm_handlers', [$this, 'register_handlers']);
+        add_filter('datamachine_handlers', [$this, 'register_handlers']);
         add_filter('ai_tools', [$this, 'register_ai_tools'], 10, 3);
         
         // Only load Yoast integration if Yoast SEO is active
         if ($this->is_yoast_active()) {
-            new DM_StructuredData_YoastIntegration();
+            new DataMachineStructuredData_YoastIntegration();
         }
         
         if (is_admin()) {
-            global $dm_structured_data_admin_page;
-            $dm_structured_data_admin_page = new DM_StructuredData_AdminPage();
+            global $datamachine_structured_data_admin_page;
+            $datamachine_structured_data_admin_page = new DataMachineStructuredData_AdminPage();
         }
     }
     
@@ -62,16 +62,16 @@ class DM_StructuredData {
     }
     
     private function load_includes() {
-        require_once DM_STRUCTURED_DATA_PATH . 'includes/StructuredDataHandler.php';
-        require_once DM_STRUCTURED_DATA_PATH . 'includes/CreatePipeline.php';
+        require_once DATAMACHINE_STRUCTURED_DATA_PATH . 'includes/StructuredDataHandler.php';
+        require_once DATAMACHINE_STRUCTURED_DATA_PATH . 'includes/CreatePipeline.php';
         
         // Only load Yoast integration if Yoast is active
         if ($this->is_yoast_active()) {
-            require_once DM_STRUCTURED_DATA_PATH . 'includes/YoastIntegration.php';
+            require_once DATAMACHINE_STRUCTURED_DATA_PATH . 'includes/YoastIntegration.php';
         }
         
         if (is_admin()) {
-            require_once DM_STRUCTURED_DATA_PATH . 'includes/admin/AdminPage.php';
+            require_once DATAMACHINE_STRUCTURED_DATA_PATH . 'includes/admin/AdminPage.php';
         }
     }
     
@@ -84,7 +84,7 @@ class DM_StructuredData {
     public function register_handlers($handlers) {
         $handlers['structured_data'] = [
             'type' => 'update',
-            'class' => 'DM_StructuredData_Handler',
+            'class' => 'DataMachineStructuredData_Handler',
             'label' => 'Structured Data',
             'description' => 'Update existing WordPress posts with AI semantic analysis for enhanced schema markup'
         ];
@@ -107,7 +107,7 @@ class DM_StructuredData {
         // Only generate structured_data tool when it's the target handler
         if ($handler_slug === 'structured_data') {
             $tools['save_semantic_analysis'] = [
-                'class' => 'DM_StructuredData_Handler',
+                'class' => 'DataMachineStructuredData_Handler',
                 'method' => 'handle_tool_call',
                 'handler' => 'structured_data',
                 'description' => 'Extract semantic metadata from content for AI crawler optimization',
@@ -155,7 +155,7 @@ class DM_StructuredData {
 }
 
 // Initialize plugin
-new DM_StructuredData();
+new DataMachineStructuredData();
 
 
 /**
@@ -165,9 +165,9 @@ new DM_StructuredData();
  * in Data Machine for potential reactivation. Users can manually delete
  * pipelines via Data Machine interface if needed.
  */
-function dm_structured_data_deactivate() {
+function datamachine_structured_data_deactivate() {
     // Clean up stored options only - preserve Data Machine entities for reactivation
-    delete_option('dm_structured_data_pipeline_id');
-    delete_option('dm_structured_data_flow_id');
+    delete_option('datamachine_structured_data_pipeline_id');
+    delete_option('datamachine_structured_data_flow_id');
 }
-register_deactivation_hook(__FILE__, 'dm_structured_data_deactivate');
+register_deactivation_hook(__FILE__, 'datamachine_structured_data_deactivate');

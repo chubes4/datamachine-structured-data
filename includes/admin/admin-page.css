@@ -179,26 +179,26 @@
 }
 
 /* Analysis Form Controls */
-.dm-form-group {
+.datamachine-form-group {
     display: flex;
     flex-direction: column;
     gap: 5px;
 }
 
-.dm-form-group label {
+.datamachine-form-group label {
     font-weight: 500;
     color: #1e293b;
 }
 
-.dm-form-group select,
-.dm-form-group textarea {
+.datamachine-form-group select,
+.datamachine-form-group textarea {
     padding: 8px 12px;
     border: 1px solid #ccd0d4;
     border-radius: 4px;
     font-size: 14px;
 }
 
-.dm-form-group textarea {
+.datamachine-form-group textarea {
     min-height: 80px;
     resize: vertical;
 }
@@ -317,7 +317,7 @@
 }
 
 /* Modal Styles */
-.dm-modal {
+.datamachine-modal {
     position: fixed;
     top: 0;
     left: 0;
@@ -330,7 +330,7 @@
     justify-content: center;
 }
 
-.dm-modal-content {
+.datamachine-modal-content {
     background: #fff;
     border-radius: 4px;
     width: 90%;
@@ -341,7 +341,7 @@
     flex-direction: column;
 }
 
-.dm-modal-header {
+.datamachine-modal-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -349,11 +349,11 @@
     border-bottom: 1px solid #ddd;
 }
 
-.dm-modal-header h3 {
+.datamachine-modal-header h3 {
     margin: 0;
 }
 
-.dm-modal-close {
+.datamachine-modal-close {
     background: none;
     border: none;
     font-size: 24px;
@@ -366,13 +366,13 @@
     justify-content: center;
 }
 
-.dm-modal-body {
+.datamachine-modal-body {
     padding: 20px;
     overflow-y: auto;
     flex: 1;
 }
 
-.dm-modal-body pre {
+.datamachine-modal-body pre {
     background: #f8f9fa;
     border: 1px solid #e9ecef;
     border-radius: 4px;
@@ -400,7 +400,7 @@
         flex-direction: column;
     }
     
-    .dm-modal-content {
+    .datamachine-modal-content {
         width: 95%;
         margin: 20px;
     }

@@ -11,12 +11,12 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-class DM_StructuredData_AdminPage {
+class DataMachineStructuredData_AdminPage {
     
-    private $page_slug = 'dm-structured-data';
+    private $page_slug = 'datamachine-structured-data';
     
     public function __construct() {
-        add_filter('dm_admin_pages', [$this, 'register_admin_page']);
+        add_filter('datamachine_admin_pages', [$this, 'register_admin_page']);
         add_action('admin_enqueue_scripts', [$this, 'enqueue_admin_assets']);
         add_action('wp_ajax_dm_structured_data_analyze', [$this, 'ajax_analyze_post']);
         add_action('wp_ajax_dm_structured_data_search_posts', [$this, 'ajax_search_posts']);
@@ -75,7 +75,7 @@ class DM_StructuredData_AdminPage {
         // Localize script
         wp_localize_script('dm-structured-data-admin', 'dmStructuredData', [
             'ajax_url' => admin_url('admin-ajax.php'),
-            'nonce' => wp_create_nonce('dm_structured_data_admin'),
+            'nonce' => wp_create_nonce('datamachine_structured_data_admin'),
             'strings' => [
                 'analyzing' => 'Analyzing post...',
                 'completed' => 'Analysis completed',
@@ -131,7 +131,7 @@ class DM_StructuredData_AdminPage {
      * AJAX handler for analyzing a post
      */
     public function ajax_analyze_post() {
-        check_ajax_referer('dm_structured_data_admin', 'nonce');
+        check_ajax_referer('datamachine_structured_data_admin', 'nonce');
         
         if (!current_user_can('manage_options')) {
             wp_die('Insufficient permissions');
@@ -156,23 +156,23 @@ class DM_StructuredData_AdminPage {
                 wp_send_json_error('Could not find fetch step in flow configuration.');
             }
             
-            do_action('dm_update_flow_handler', $fetch_step_id, 'wordpress_posts', [
+            do_action('datamachine_update_flow_handler', $fetch_step_id, 'wordpress_posts', [
                 'post_id' => $post_id
             ]);
             
             // Execute pipeline flow for immediate analysis
-            $flow_id = get_option('dm_structured_data_flow_id');
-            do_action('dm_run_flow_now', $flow_id);
+            $flow_id = get_option('datamachine_structured_data_flow_id');
+            do_action('datamachine_run_flow_now', $flow_id);
             
             wp_send_json_success([
                 'message' => 'Structured data processing started',
                 'post_id' => $post_id,
-                'flow_id' => get_option('dm_structured_data_flow_id')
+                'flow_id' => get_option('datamachine_structured_data_flow_id')
             ]);
         } catch (Exception $e) {
-            do_action('dm_log', 'error', 'Failed to run structured data flow: ' . $e->getMessage(), [
+            do_action('datamachine_log', 'error', 'Failed to run structured data flow: ' . $e->getMessage(), [
                 'post_id' => $post_id,
-                'flow_id' => get_option('dm_structured_data_flow_id'),
+                'flow_id' => get_option('datamachine_structured_data_flow_id'),
                 'error' => $e->getMessage()
             ]);
             
@@ -184,7 +184,7 @@ class DM_StructuredData_AdminPage {
      * AJAX handler for searching posts
      */
     public function ajax_search_posts() {
-        check_ajax_referer('dm_structured_data_admin', 'nonce');
+        check_ajax_referer('datamachine_structured_data_admin', 'nonce');
         
         $search_term = sanitize_text_field($_POST['search'] ?? '');
         
@@ -216,7 +216,7 @@ class DM_StructuredData_AdminPage {
      * AJAX handler for updating a field inline
      */
     public function ajax_update_field() {
-        check_ajax_referer('dm_structured_data_admin', 'nonce');
+        check_ajax_referer('datamachine_structured_data_admin', 'nonce');
         
         $post_id = intval($_POST['post_id'] ?? 0);
         $field = sanitize_text_field($_POST['field'] ?? '');
@@ -246,7 +246,7 @@ class DM_StructuredData_AdminPage {
      * AJAX handler for deleting structured data
      */
     public function ajax_delete_data() {
-        check_ajax_referer('dm_structured_data_admin', 'nonce');
+        check_ajax_referer('datamachine_structured_data_admin', 'nonce');
         
         $post_id = intval($_POST['post_id'] ?? 0);
         
@@ -266,7 +266,7 @@ class DM_StructuredData_AdminPage {
      * AJAX handler for bulk actions
      */
     public function ajax_bulk_action() {
-        check_ajax_referer('dm_structured_data_admin', 'nonce');
+        check_ajax_referer('datamachine_structured_data_admin', 'nonce');
         
         $action = sanitize_text_field($_POST['bulk_action'] ?? '');
         $post_ids = array_map('intval', $_POST['post_ids'] ?? []);
@@ -306,13 +306,13 @@ class DM_StructuredData_AdminPage {
                 
                 foreach ($post_ids as $post_id) {
                     // Configure WordPress fetch handler for each post
-                    do_action('dm_update_flow_handler', $fetch_step_id, 'wordpress_posts', [
+                    do_action('datamachine_update_flow_handler', $fetch_step_id, 'wordpress_posts', [
                         'post_id' => $post_id
                     ]);
                     
                     // Execute flow for this post
-                    $flow_id = get_option('dm_structured_data_flow_id');
-                    do_action('dm_run_flow_now', $flow_id);
+                    $flow_id = get_option('datamachine_structured_data_flow_id');
+                    do_action('datamachine_run_flow_now', $flow_id);
                     $results[] = $post_id;
                 }
                 wp_send_json_success([
@@ -332,29 +332,29 @@ class DM_StructuredData_AdminPage {
      * Delegates to the CreatePipeline service for clean separation of concerns.
      */
     public function ajax_create_pipeline() {
-        do_action('dm_log', 'info', 'AJAX create pipeline method called', [
+        do_action('datamachine_log', 'info', 'AJAX create pipeline method called', [
             'action' => $_POST['action'] ?? 'not_set',
             'nonce_provided' => isset($_POST['nonce']),
             'user_can_manage' => current_user_can('manage_options')
         ]);
         
-        check_ajax_referer('dm_structured_data_admin', 'nonce');
+        check_ajax_referer('datamachine_structured_data_admin', 'nonce');
         
         if (!current_user_can('manage_options')) {
-            do_action('dm_log', 'error', 'Insufficient permissions for pipeline creation');
+            do_action('datamachine_log', 'error', 'Insufficient permissions for pipeline creation');
             wp_die('Insufficient permissions');
         }
         
         try {
-            do_action('dm_log', 'debug', 'Instantiating CreatePipeline service');
+            do_action('datamachine_log', 'debug', 'Instantiating CreatePipeline service');
             
             // Use dedicated service for pipeline creation
             $pipeline_service = new DM_StructuredData_CreatePipeline();
             
-            do_action('dm_log', 'debug', 'Calling create_pipeline method');
+            do_action('datamachine_log', 'debug', 'Calling create_pipeline method');
             $result = $pipeline_service->create_pipeline();
             
-            do_action('dm_log', 'debug', 'CreatePipeline service completed', [
+            do_action('datamachine_log', 'debug', 'CreatePipeline service completed', [
                 'success' => $result['success'] ?? false,
                 'has_error' => isset($result['error'])
             ]);
@@ -365,7 +365,7 @@ class DM_StructuredData_AdminPage {
                 wp_send_json_error($result['error']);
             }
         } catch (Exception $e) {
-            do_action('dm_log', 'error', 'Exception in ajax_create_pipeline', [
+            do_action('datamachine_log', 'error', 'Exception in ajax_create_pipeline', [
                 'message' => $e->getMessage(),
                 'file' => $e->getFile(),
                 'line' => $e->getLine()

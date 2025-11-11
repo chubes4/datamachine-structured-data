@@ -19,6 +19,16 @@ AI-powered semantic analysis for enhanced WordPress structured data via [Data Ma
 - **Data Machine plugin** (required - plugin will not activate without it)
 - Yoast SEO plugin (optional - for automatic schema enhancement)
 
+## Migration Status
+
+**Prefix Migration:**
+- Current: Migrated to `datamachine_` prefix throughout
+- Status: Complete - all `dm_` prefixes updated to `datamachine_`
+
+**API Architecture:**
+- Note: Core plugin implements 9 REST API endpoint files with comprehensive functionality (Execute, Flows, Pipelines, Files, Users, Logs, Status, Jobs, ProcessedItems)
+- Extension: No extension-specific REST API endpoints
+
 ## Installation
 
 1. **Install Data Machine Plugin** (required dependency)
@@ -71,7 +81,7 @@ The plugin provides an admin interface for managing the structured data analysis
 **Manual Pipeline Creation** (Advanced)
 ```php
 // Create pipeline using service class
-$pipeline_service = new DM_StructuredData_CreatePipeline();
+$pipeline_service = new DataMachineStructuredData_CreatePipeline();
 $result = $pipeline_service->create_pipeline();
 
 if ($result['success']) {
@@ -104,7 +114,7 @@ The plugin works through Data Machine's pipeline system:
 ```php
 // Get semantic data for a post
 $post_id = 123;
-$semantic_data = DM_StructuredData_Handler::get_structured_data($post_id);
+$semantic_data = DataMachineStructuredData_Handler::get_structured_data($post_id);
 
 if ($semantic_data) {
     echo "Content Type: " . $semantic_data['content_type'];
@@ -117,12 +127,12 @@ if ($semantic_data) {
 
 ```php
 // Check if post has semantic data
-if (DM_StructuredData_Handler::has_structured_data($post_id)) {
+if (DataMachineStructuredData_Handler::has_structured_data($post_id)) {
     echo "Post has AI-generated semantic data";
 }
 
 // Check if data needs updating
-if (DM_StructuredData_Handler::needs_update($post_id)) {
+if (DataMachineStructuredData_Handler::needs_update($post_id)) {
     echo "Content has changed, semantic data should be refreshed";
 }
 ```
@@ -131,7 +141,7 @@ if (DM_StructuredData_Handler::needs_update($post_id)) {
 
 ```php
 // Get AI enrichment object for custom schema integration
-$enrichment = DM_StructuredData_YoastIntegration::get_enriched_schema_for_post($post_id);
+$enrichment = DataMachineStructuredData_YoastIntegration::get_enriched_schema_for_post($post_id);
 
 if ($enrichment) {
     // Add to custom schema
@@ -141,7 +151,7 @@ if ($enrichment) {
 
 ## API Reference
 
-### DM_StructuredData_Handler
+### DataMachineStructuredData_Handler
 
 Core handler class for processing AI tool calls and managing semantic data.
 
@@ -169,7 +179,7 @@ Core handler class for processing AI tool calls and managing semantic data.
 - **Parameters**: `$post_id` (int): WordPress post ID
 - **Returns**: Boolean indicating if update is needed
 
-### DM_StructuredData_YoastIntegration
+### DataMachineStructuredData_YoastIntegration
 
 Yoast SEO integration class for schema enhancement.
 
@@ -264,7 +274,7 @@ Enhanced Yoast schema with AI enrichment:
 
 Semantic metadata is stored in WordPress post meta:
 
-**Meta Key**: `_dm_structured_data`  
+**Meta Key**: `_datamachine_structured_data`  
 **Storage Format**: Serialized array with sanitized values
 **Includes**: All semantic fields plus generation metadata
 
@@ -297,7 +307,7 @@ if (class_exists('DataMachine\\Core\\Engine\\Actions\\DataMachineActions')) {
 }
 
 // Check if plugin is registered
-if (class_exists('DM_StructuredData_Handler')) {
+if (class_exists('DataMachineStructuredData_Handler')) {
     echo "Structured Data plugin is loaded";
 }
 ```
@@ -309,26 +319,26 @@ if (class_exists('DM_StructuredData_Handler')) {
 3. **Manual Execution**: Test individual posts via admin interface or programmatically:
    ```php
    // Get pipeline components
-   $pipeline_service = new DM_StructuredData_CreatePipeline();
-   $flow_id = get_option('dm_structured_data_flow_id');
+   $pipeline_service = new DataMachineStructuredData_CreatePipeline();
+   $flow_id = get_option('datamachine_structured_data_flow_id');
    $fetch_step_id = $pipeline_service->get_flow_step_id('fetch');
    
    // Configure for specific post
-   do_action('dm_update_flow_handler', $fetch_step_id, 'wordpress_posts', [
+   do_action('datamachine_update_flow_handler', $fetch_step_id, 'wordpress_posts', [
        'post_id' => $post_id
    ]);
    
    // Execute analysis
-   do_action('dm_run_flow_now', $flow_id);
+   do_action('datamachine_run_flow_now', $flow_id);
    ```
 4. **Monitor Status**: Check pipeline creation and execution status via admin interface
-5. **Validate Data**: Check post meta for `_dm_structured_data` and Yoast schema output
+5. **Validate Data**: Check post meta for `_datamachine_structured_data` and Yoast schema output
 
 ### Debug Pipeline Processing
 
 ```php
 // Check if pipeline exists
-$pipeline_service = new DM_StructuredData_CreatePipeline();
+$pipeline_service = new DataMachineStructuredData_CreatePipeline();
 if ($pipeline_service->pipeline_exists()) {
     echo "Pipeline exists and is ready";
 } else {
@@ -336,7 +346,7 @@ if ($pipeline_service->pipeline_exists()) {
 }
 
 // Verify pipeline components
-$pipelines = apply_filters('dm_get_pipelines', []);
+$pipelines = apply_filters('datamachine_get_pipelines', []);
 foreach ($pipelines as $pipeline) {
     if ($pipeline['pipeline_name'] === 'Structured Data Analysis Pipeline') {
         echo "Pipeline ID: " . $pipeline['pipeline_id'];
@@ -345,14 +355,14 @@ foreach ($pipelines as $pipeline) {
 }
 
 // Data Machine logging for background job
-do_action('dm_log', 'info', 'Testing structured data pipeline', [
-    'flow_id' => get_option('dm_structured_data_flow_id'),
+do_action('datamachine_log', 'info', 'Testing structured data pipeline', [
+    'flow_id' => get_option('datamachine_structured_data_flow_id'),
     'post_id' => $post_id
 ]);
 
 // Manual execution using stored IDs
-$flow_id = get_option('dm_structured_data_flow_id');
-do_action('dm_run_flow_now', $flow_id);
+$flow_id = get_option('datamachine_structured_data_flow_id');
+do_action('datamachine_run_flow_now', $flow_id);
 
 // Monitor pipeline execution
 // Check Data Machine → Jobs for pipeline execution status
@@ -394,13 +404,13 @@ For non-Yoast implementations:
 
 ```php
 // Get semantic data for custom schema
-$semantic_data = DM_StructuredData_Handler::get_structured_data(get_the_ID());
+$semantic_data = DataMachineStructuredData_Handler::get_structured_data(get_the_ID());
 
 if ($semantic_data) {
     // Build custom schema
     $schema = [
         '@type' => 'Article',
-        'aiEnrichment' => DM_StructuredData_YoastIntegration::get_enriched_schema_for_post(get_the_ID())
+        'aiEnrichment' => DataMachineStructuredData_YoastIntegration::get_enriched_schema_for_post(get_the_ID())
     ];
 }
 ```
@@ -416,7 +426,7 @@ if ($semantic_data) {
 
 **Pipeline Creation Failed**
 - Check immediate error response in admin interface
-- Verify Data Machine is properly loaded: `has_filter('dm_handlers')`
+- Verify Data Machine is properly loaded: `has_filter('datamachine_handlers')`
 - Review Data Machine logs for creation errors
 - Ensure Data Machine handlers are properly registered
 
@@ -449,7 +459,7 @@ define('WP_DEBUG_LOG', true);
 // View via Data Machine → Logs admin page
 
 // Check recent logs programmatically
-$recent_logs = apply_filters('dm_log_file', [], 'get_recent', 100);
+$recent_logs = apply_filters('datamachine_log_file', [], 'get_recent', 100);
 ```
 
 ## Support

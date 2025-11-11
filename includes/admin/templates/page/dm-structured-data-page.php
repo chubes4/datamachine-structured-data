@@ -46,7 +46,7 @@ if ($posts_query->have_posts()) {
 }
 
 ?>
-<div class="wrap dm-structured-data">
+<div class="wrap datamachine-structured-data">
     <h1>Structured Data Management</h1>
     <p>AI-powered semantic analysis for WordPress content. Analyze posts to generate structured data that enhances search engine understanding.</p>
     
@@ -74,20 +74,20 @@ if ($posts_query->have_posts()) {
     <?php endif; ?>
     
     <!-- Analysis Interface -->
-    <div class="dm-analysis-section">
+    <div class="datamachine-analysis-section">
         <h2>Content Analysis</h2>
         
-        <div class="dm-analysis-controls">
-            <div class="dm-analysis-form">
-                <div class="dm-form-group">
+        <div class="datamachine-analysis-controls">
+            <div class="datamachine-analysis-form">
+                <div class="datamachine-form-group">
                     <label for="post-search">Select Post to Analyze</label>
-                    <div class="dm-post-search">
+                    <div class="datamachine-post-search">
                         <input type="text" id="post-search" placeholder="Search for posts..." autocomplete="off">
-                        <div id="post-search-results" class="dm-search-results"></div>
+                        <div id="post-search-results" class="datamachine-search-results"></div>
                     </div>
                 </div>
                 
-                <div class="dm-form-group">
+                <div class="datamachine-form-group">
                     <button type="button" id="add-structured-data-btn" class="button button-primary" disabled>
                         Add Structured Data
                     </button>
@@ -97,13 +97,13 @@ if ($posts_query->have_posts()) {
     </div>
     
     <!-- Data Management Table -->
-    <div class="dm-data-section">
+    <div class="datamachine-data-section">
         <h2>Existing Structured Data</h2>
         
-        <div class="dm-data-controls">
-            <input type="search" id="data-search" class="dm-data-search" placeholder="Search structured data...">
+        <div class="datamachine-data-controls">
+            <input type="search" id="data-search" class="datamachine-data-search" placeholder="Search structured data...">
             
-            <div class="dm-bulk-actions">
+            <div class="datamachine-bulk-actions">
                 <select id="bulk-action">
                     <option value="">Bulk Actions</option>
                     <option value="delete">Delete</option>

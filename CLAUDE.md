@@ -4,6 +4,20 @@ AI-powered semantic analysis extension for Data Machine that enhances WordPress 
 
 **Version**: 1.0.0
 
+## Migration Status
+
+**Prefix Migration:**
+- Current: Still uses `dm_` prefixes in AJAX actions and meta keys
+- Status: Pending migration to `datamachine_` prefixes
+- Details: See root `/CLAUDE.md` and `/MIGRATION-PLAN.md` for migration patterns
+
+**REST API Integration:**
+- Integration Method: Filter-based handler registration (no custom REST endpoints needed)
+- Core Endpoint Used: `/datamachine/v1/execute` (automatic integration via `datamachine_handlers` filter)
+- Pattern: DM Structured Data registers handler via filters - Data Machine core handles all REST API operations
+- Documentation: See `/datamachine/docs/api-reference/rest-api-extensions.md` for filter-based integration pattern
+- Note: No custom REST API endpoints required - semantic analysis handler integrates seamlessly with Data Machine execution engine
+
 ## Architecture Overview
 
 The plugin extends Data Machine's pipeline system with semantic content analysis capabilities that automatically classify WordPress content and inject AI-enriched properties into Yoast-generated schema markup.
@@ -14,7 +28,7 @@ The plugin extends Data Machine's pipeline system with semantic content analysis
 
 ```
 dm-structured-data/
-├── dm-structured-data.php          # Main plugin file
+├── datamachine-structured-data.php          # Main plugin file
 ├── includes/
 │   ├── StructuredDataHandler.php   # Data Machine handler implementation
 │   ├── CreatePipeline.php          # Pipeline creation service
@@ -210,7 +224,7 @@ The plugin uses name-based pipeline detection instead of stored IDs:
 
 ```php
 public function pipeline_exists() {
-    $pipelines = apply_filters('dm_get_pipelines', []);
+    $pipelines = apply_filters('datamachine_get_pipelines', []);
     foreach ($pipelines as $pipeline) {
         if ($pipeline['pipeline_name'] === 'Structured Data Analysis Pipeline') {
             return true;

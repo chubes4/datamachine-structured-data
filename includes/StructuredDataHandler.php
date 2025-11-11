@@ -10,7 +10,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-class DM_StructuredData_Handler {
+class DataMachineStructuredData_Handler {
 
     /**
      * Process AI tool call for semantic analysis.
@@ -23,7 +23,7 @@ class DM_StructuredData_Handler {
         $post_id = $this->extract_post_id_from_context($parameters, $tool_def);
         
         if (!$post_id) {
-            do_action('dm_log', 'error', 'StructuredData Handler: No post ID found', [
+            do_action('datamachine_log', 'error', 'StructuredData Handler: No post ID found', [
                 'parameters_keys' => array_keys($parameters),
                 'tool_def' => $tool_def
             ]);
@@ -35,7 +35,7 @@ class DM_StructuredData_Handler {
         
         $post = get_post($post_id);
         if (!$post) {
-            do_action('dm_log', 'error', 'StructuredData Handler: Post not found', [
+            do_action('datamachine_log', 'error', 'StructuredData Handler: Post not found', [
                 'post_id' => $post_id
             ]);
             return [
@@ -47,7 +47,7 @@ class DM_StructuredData_Handler {
         $structured_data = $this->prepare_structured_data($parameters, $post);
         
         if (empty($structured_data)) {
-            do_action('dm_log', 'error', 'StructuredData Handler: No valid semantic data to save', [
+            do_action('datamachine_log', 'error', 'StructuredData Handler: No valid semantic data to save', [
                 'post_id' => $post_id,
                 'parameters_keys' => array_keys($parameters)
             ]);
@@ -60,7 +60,7 @@ class DM_StructuredData_Handler {
         $result = update_post_meta($post_id, '_dm_structured_data', $structured_data);
         
         if ($result) {
-            do_action('dm_log', 'info', 'StructuredData Handler: Analysis saved successfully', [
+            do_action('datamachine_log', 'info', 'StructuredData Handler: Analysis saved successfully', [
                 'post_id' => $post_id,
                 'post_title' => $post->post_title,
                 'data_keys' => array_keys($structured_data)
@@ -75,7 +75,7 @@ class DM_StructuredData_Handler {
                 ]
             ];
         } else {
-            do_action('dm_log', 'error', 'StructuredData Handler: Failed to save analysis', [
+            do_action('datamachine_log', 'error', 'StructuredData Handler: Failed to save analysis', [
                 'post_id' => $post_id,
                 'post_title' => $post->post_title
             ]);
@@ -98,14 +98,14 @@ class DM_StructuredData_Handler {
     private function extract_post_id_from_context($parameters, $tool_def) {
         // Primary pattern: Update step extracts original_id from data packet metadata
         if (isset($parameters['original_id']) && is_numeric($parameters['original_id'])) {
-            do_action('dm_log', 'debug', 'StructuredData Handler: Found post ID from Update step', [
+            do_action('datamachine_log', 'debug', 'StructuredData Handler: Found post ID from Update step', [
                 'post_id' => (int)$parameters['original_id']
             ]);
             return (int)$parameters['original_id'];
         }
         
         // Debugging - log what was actually provided
-        do_action('dm_log', 'error', 'StructuredData Handler: original_id not found in parameters', [
+        do_action('datamachine_log', 'error', 'StructuredData Handler: original_id not found in parameters', [
             'parameters_keys' => array_keys($parameters),
             'expected_field' => 'original_id'
         ]);
