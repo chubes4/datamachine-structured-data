@@ -84,12 +84,12 @@ jQuery(document).ready(function($) {
      */
     function searchPosts(term) {
         $.ajax({
-            url: dmStructuredData.ajax_url,
+            url: datamachineStructuredData.ajax_url,
             type: 'POST',
             data: {
-                action: 'dm_structured_data_search_posts',
+                action: 'datamachine_structured_data_search_posts',
                 search: term,
-                nonce: dmStructuredData.nonce
+                nonce: datamachineStructuredData.nonce
             },
             success: function(response) {
                 if (response.success) {
@@ -153,12 +153,12 @@ jQuery(document).ready(function($) {
         addStructuredDataBtn.prop('disabled', true).text('Adding...');
         
         $.ajax({
-            url: dmStructuredData.ajax_url,
+            url: datamachineStructuredData.ajax_url,
             type: 'POST',
             data: {
-                action: 'dm_structured_data_analyze',
+                action: 'datamachine_structured_data_analyze',
                 post_id: selectedPostId,
-                nonce: dmStructuredData.nonce
+                nonce: datamachineStructuredData.nonce
             },
             success: function(response) {
                 if (response.success) {
@@ -211,14 +211,14 @@ jQuery(document).ready(function($) {
      */
     function updateField(postId, field, value, element) {
         $.ajax({
-            url: dmStructuredData.ajax_url,
+            url: datamachineStructuredData.ajax_url,
             type: 'POST',
             data: {
-                action: 'dm_structured_data_update_field',
+                action: 'datamachine_structured_data_update_field',
                 post_id: postId,
                 field: field,
                 value: value,
-                nonce: dmStructuredData.nonce
+                nonce: datamachineStructuredData.nonce
             },
             success: function(response) {
                 if (response.success) {
@@ -257,17 +257,17 @@ jQuery(document).ready(function($) {
         const postId = $(this).data('post-id');
         const row = $(this).closest('tr');
         
-        if (!confirm(dmStructuredData.strings.confirm_delete)) {
+        if (!confirm(datamachineStructuredData.strings.confirm_delete)) {
             return;
         }
         
         $.ajax({
-            url: dmStructuredData.ajax_url,
+            url: datamachineStructuredData.ajax_url,
             type: 'POST',
             data: {
-                action: 'dm_structured_data_delete',
+                action: 'datamachine_structured_data_delete',
                 post_id: postId,
-                nonce: dmStructuredData.nonce
+                nonce: datamachineStructuredData.nonce
             },
             success: function(response) {
                 if (response.success) {
@@ -321,18 +321,18 @@ jQuery(document).ready(function($) {
         
         if (!action || selectedIds.length === 0) return;
         
-        if (!confirm(dmStructuredData.strings.confirm_bulk_delete)) {
+        if (!confirm(datamachineStructuredData.strings.confirm_bulk_delete)) {
             return;
         }
         
         $.ajax({
-            url: dmStructuredData.ajax_url,
+            url: datamachineStructuredData.ajax_url,
             type: 'POST',
             data: {
-                action: 'dm_structured_data_bulk_action',
+                action: 'datamachine_structured_data_bulk_action',
                 bulk_action: action,
                 post_ids: selectedIds,
-                nonce: dmStructuredData.nonce
+                nonce: datamachineStructuredData.nonce
             },
             success: function(response) {
                 if (response.success) {
@@ -400,8 +400,8 @@ jQuery(document).ready(function($) {
         const $result = $('#create-pipeline-result');
         
         console.log('DM Structured Data: Create pipeline button clicked');
-        console.log('DM Structured Data: AJAX URL:', dmStructuredData.ajax_url);
-        console.log('DM Structured Data: Nonce:', dmStructuredData.nonce);
+        console.log('DM Structured Data: AJAX URL:', datamachineStructuredData.ajax_url);
+        console.log('DM Structured Data: Nonce:', datamachineStructuredData.nonce);
         
         // Show loading state
         $button.prop('disabled', true).text('Creating Pipeline...');
@@ -410,11 +410,11 @@ jQuery(document).ready(function($) {
         
         console.log('DM Structured Data: Making AJAX request...');
         $.ajax({
-            url: dmStructuredData.ajax_url,
+            url: datamachineStructuredData.ajax_url,
             type: 'POST',
             data: {
-                action: 'dm_structured_data_create_pipeline',
-                nonce: dmStructuredData.nonce
+                action: 'datamachine_structured_data_create_pipeline',
+                nonce: datamachineStructuredData.nonce
             },
             beforeSend: function() {
                 console.log('DM Structured Data: AJAX request sent');

@@ -6,7 +6,7 @@
  * Author: Chris Huber
  * Author URI: https://chubes.net
  * Requires at least: 5.0
- * Tested up to: 6.4
+  * Tested up to: 6.8
  * Requires PHP: 8.0
  * Requires Plugins: data-machine
  * License: GPL v2 or later
@@ -44,7 +44,7 @@ class DataMachineStructuredData {
         $this->load_includes();
         
         add_filter('datamachine_handlers', [$this, 'register_handlers']);
-        add_filter('ai_tools', [$this, 'register_ai_tools'], 10, 3);
+        add_filter('chubes_ai_tools', [$this, 'register_chubes_ai_tools'], 10, 3);
         
         // Only load Yoast integration if Yoast SEO is active
         if ($this->is_yoast_active()) {
@@ -103,7 +103,7 @@ class DataMachineStructuredData {
      * @param array $handler_config Handler configuration
      * @return array Modified tools array with semantic analysis tool
      */
-    public function register_ai_tools($tools, $handler_slug = null, $handler_config = []) {
+    public function register_chubes_ai_tools($tools, $handler_slug = null, $handler_config = []) {
         // Only generate structured_data tool when it's the target handler
         if ($handler_slug === 'structured_data') {
             $tools['save_semantic_analysis'] = [

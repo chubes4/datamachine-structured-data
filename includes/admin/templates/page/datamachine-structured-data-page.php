@@ -5,7 +5,7 @@
  * Main page template for the Structured Data Management admin interface.
  * Contains analysis controls and data management table.
  *
- * @package DM_StructuredData\Admin\Templates
+ * @package DataMachine_StructuredData\Admin\Templates
  */
 
 if (!defined('WPINC')) {
@@ -19,7 +19,7 @@ $structured_data_posts = [];
 
 // Simple query for posts with structured data
 $posts_query = new WP_Query([
-    'meta_key' => '_dm_structured_data',
+    'meta_key' => '_datamachine_structured_data',
     'meta_compare' => 'EXISTS',
     'posts_per_page' => 50,
     'post_status' => 'any',
@@ -30,7 +30,7 @@ if ($posts_query->have_posts()) {
     while ($posts_query->have_posts()) {
         $posts_query->the_post();
         $post_id = get_the_ID();
-        $structured_data = get_post_meta($post_id, '_dm_structured_data', true);
+        $structured_data = get_post_meta($post_id, '_datamachine_structured_data', true);
         
         if ($structured_data && is_array($structured_data)) {
             $structured_data_posts[] = [
@@ -52,7 +52,7 @@ if ($posts_query->have_posts()) {
     
     <?php 
     // Check if pipeline exists
-    $pipeline_service = new DM_StructuredData_CreatePipeline();
+    $pipeline_service = new DataMachine_StructuredData_CreatePipeline();
     if (!$pipeline_service->pipeline_exists()): 
     ?>
     <div class="notice notice-info">

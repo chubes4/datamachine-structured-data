@@ -42,15 +42,15 @@ class DataMachineStructuredData_YoastIntegration {
             'context_type' => is_object($context) ? get_class($context) : gettype($context)
         ]);
         
-        if (!$post_id || !DM_StructuredData_Handler::has_structured_data($post_id)) {
+        if (!$post_id || !DataMachine_StructuredData_Handler::has_structured_data($post_id)) {
             do_action('datamachine_log', 'debug', 'Yoast Integration: No structured data found', [
                 'post_id' => $post_id,
-                'has_data' => $post_id ? DM_StructuredData_Handler::has_structured_data($post_id) : false
+                'has_data' => $post_id ? DataMachine_StructuredData_Handler::has_structured_data($post_id) : false
             ]);
             return $graph;
         }
         
-        $structured_data = DM_StructuredData_Handler::get_structured_data($post_id);
+        $structured_data = DataMachine_StructuredData_Handler::get_structured_data($post_id);
         
         if (empty($structured_data)) {
             do_action('datamachine_log', 'debug', 'Yoast Integration: Empty structured data', [
@@ -185,11 +185,11 @@ class DataMachineStructuredData_YoastIntegration {
      * @return array|null AI enrichment object or null if no data
      */
     public static function get_enriched_schema_for_post($post_id) {
-        if (!DM_StructuredData_Handler::has_structured_data($post_id)) {
+        if (!DataMachine_StructuredData_Handler::has_structured_data($post_id)) {
             return null;
         }
         
-        $structured_data = DM_StructuredData_Handler::get_structured_data($post_id);
+        $structured_data = DataMachine_StructuredData_Handler::get_structured_data($post_id);
         $integration = new self();
         
         return $integration->build_ai_enrichment_object($structured_data);

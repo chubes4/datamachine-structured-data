@@ -38,10 +38,10 @@ AI-powered semantic analysis for enhanced WordPress structured data via [Data Ma
    ```
 
 2. **Install DM Structured Data Extension**
-   ```bash
-   # Upload plugin files to wp-content/plugins/dm-structured-data/
-   # Or install via WordPress admin
-   ```
+    ```bash
+    # Upload plugin files to wp-content/plugins/datamachine-structured-data/
+    # Or install via WordPress admin
+    ```
 
 3. **Activate Plugin**
    - Navigate to WordPress Admin → Plugins
@@ -375,7 +375,7 @@ do_action('datamachine_run_flow_now', $flow_id);
 Add custom fields to the AI analysis tool:
 
 ```php
-add_filter('ai_tools', function($tools) {
+add_filter('chubes_ai_tools', function($tools) {
     if (isset($tools['save_semantic_analysis']['parameters'])) {
         $tools['save_semantic_analysis']['parameters']['custom_field'] = [
             'type' => 'string',

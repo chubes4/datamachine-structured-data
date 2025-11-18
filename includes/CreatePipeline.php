@@ -23,7 +23,7 @@ class DataMachineStructuredData_CreatePipeline {
     public function create_pipeline(): array {
         try {
             // Check Data Machine dependency
-            if (!has_filter('dm_create_pipeline')) {
+            if (!has_filter('datamachine_create_pipeline')) {
                 return [
                     'success' => false,
                     'error' => 'Data Machine plugin is required for this plugin to work.'

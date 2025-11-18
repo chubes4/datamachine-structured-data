@@ -57,7 +57,7 @@ class DataMachineStructuredData_Handler {
             ];
         }
         
-        $result = update_post_meta($post_id, '_dm_structured_data', $structured_data);
+        $result = update_post_meta($post_id, '_datamachine_structured_data', $structured_data);
         
         if ($result) {
             do_action('datamachine_log', 'info', 'StructuredData Handler: Analysis saved successfully', [
@@ -198,7 +198,7 @@ class DataMachineStructuredData_Handler {
      * @return array|false Structured data array or false if none exists
      */
     public static function get_structured_data($post_id) {
-        return get_post_meta($post_id, '_dm_structured_data', true);
+        return get_post_meta($post_id, '_datamachine_structured_data', true);
     }
     
     /**

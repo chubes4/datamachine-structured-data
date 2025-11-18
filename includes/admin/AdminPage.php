@@ -18,12 +18,12 @@ class DataMachineStructuredData_AdminPage {
     public function __construct() {
         add_filter('datamachine_admin_pages', [$this, 'register_admin_page']);
         add_action('admin_enqueue_scripts', [$this, 'enqueue_admin_assets']);
-        add_action('wp_ajax_dm_structured_data_analyze', [$this, 'ajax_analyze_post']);
-        add_action('wp_ajax_dm_structured_data_search_posts', [$this, 'ajax_search_posts']);
-        add_action('wp_ajax_dm_structured_data_update_field', [$this, 'ajax_update_field']);
-        add_action('wp_ajax_dm_structured_data_delete', [$this, 'ajax_delete_data']);
-        add_action('wp_ajax_dm_structured_data_bulk_action', [$this, 'ajax_bulk_action']);
-        add_action('wp_ajax_dm_structured_data_create_pipeline', [$this, 'ajax_create_pipeline']);
+        add_action('wp_ajax_datamachine_structured_data_analyze', [$this, 'ajax_analyze_post']);
+        add_action('wp_ajax_datamachine_structured_data_search_posts', [$this, 'ajax_search_posts']);
+        add_action('wp_ajax_datamachine_structured_data_update_field', [$this, 'ajax_update_field']);
+        add_action('wp_ajax_datamachine_structured_data_delete', [$this, 'ajax_delete_data']);
+        add_action('wp_ajax_datamachine_structured_data_bulk_action', [$this, 'ajax_bulk_action']);
+        add_action('wp_ajax_datamachine_structured_data_create_pipeline', [$this, 'ajax_create_pipeline']);
     }
     
     
@@ -39,7 +39,7 @@ class DataMachineStructuredData_AdminPage {
             'menu_title' => 'Structured Data',
             'capability' => 'manage_options',
             'position' => 30,
-            'templates' => DM_STRUCTURED_DATA_PATH . 'includes/admin/templates/',
+            'templates' => DATAMACHINE_STRUCTURED_DATA_PATH . 'includes/admin/templates/',
         ];
         
         return $pages;
@@ -56,24 +56,24 @@ class DataMachineStructuredData_AdminPage {
         
         // Enqueue CSS
         wp_enqueue_style(
-            'dm-structured-data-admin',
-            DM_STRUCTURED_DATA_URL . 'includes/admin/admin-page.css',
+            'datamachine-structured-data-admin',
+            DATAMACHINE_STRUCTURED_DATA_URL . 'includes/admin/admin-page.css',
             [],
-            DM_STRUCTURED_DATA_VERSION,
+            DATAMACHINE_STRUCTURED_DATA_VERSION,
             'all'
         );
         
         // Enqueue JavaScript
         wp_enqueue_script(
-            'dm-structured-data-admin',
-            DM_STRUCTURED_DATA_URL . 'includes/admin/admin-page.js',
+            'datamachine-structured-data-admin',
+            DATAMACHINE_STRUCTURED_DATA_URL . 'includes/admin/admin-page.js',
             ['jquery'],
-            DM_STRUCTURED_DATA_VERSION,
+            DATAMACHINE_STRUCTURED_DATA_VERSION,
             true
         );
         
         // Localize script
-        wp_localize_script('dm-structured-data-admin', 'dmStructuredData', [
+        wp_localize_script('datamachine-structured-data-admin', 'datamachineStructuredData', [
             'ajax_url' => admin_url('admin-ajax.php'),
             'nonce' => wp_create_nonce('datamachine_structured_data_admin'),
             'strings' => [
@@ -93,7 +93,7 @@ class DataMachineStructuredData_AdminPage {
      */
     public function get_posts_with_structured_data() {
         $posts_query = new WP_Query([
-            'meta_key' => '_dm_structured_data',
+            'meta_key' => '_datamachine_structured_data',
             'meta_compare' => 'EXISTS',
             'posts_per_page' => 50,
             'post_status' => 'any',
@@ -106,7 +106,7 @@ class DataMachineStructuredData_AdminPage {
             while ($posts_query->have_posts()) {
                 $posts_query->the_post();
                 $post_id = get_the_ID();
-                $structured_data = get_post_meta($post_id, '_dm_structured_data', true);
+                $structured_data = get_post_meta($post_id, '_datamachine_structured_data', true);
                 
                 if ($structured_data && is_array($structured_data)) {
                     $structured_data_posts[] = [
@@ -144,7 +144,7 @@ class DataMachineStructuredData_AdminPage {
         }
         
         // Verify pipeline exists using name-based detection
-        $pipeline_service = new DM_StructuredData_CreatePipeline();
+        $pipeline_service = new DataMachine_StructuredData_CreatePipeline();
         if (!$pipeline_service->pipeline_exists()) {
             wp_send_json_error('Structured data pipeline not found. Please create the pipeline first.');
         }
@@ -226,14 +226,19 @@ class DataMachineStructuredData_AdminPage {
             wp_send_json_error('Invalid parameters');
         }
         
-        $structured_data = DM_StructuredData_Handler::get_structured_data($post_id);
+        if (class_exists('DataMachine_StructuredData_Handler') && method_exists('DataMachine_StructuredData_Handler', 'get_structured_data')) {
+            $structured_data = DataMachine_StructuredData_Handler::get_structured_data($post_id);
+        } else {
+            // Fallback to reading stored meta directly when the handler class is not available
+            $structured_data = get_post_meta($post_id, '_datamachine_structured_data', true);
+        }
         if (!$structured_data) {
             wp_send_json_error('No structured data found');
         }
         
         // Update the specific field
         $structured_data[$field] = $value;
-        update_post_meta($post_id, '_dm_structured_data', $structured_data);
+        update_post_meta($post_id, '_datamachine_structured_data', $structured_data);
         
         wp_send_json_success([
             'message' => 'Field updated',
@@ -254,7 +259,7 @@ class DataMachineStructuredData_AdminPage {
             wp_send_json_error('Invalid post ID');
         }
         
-        delete_post_meta($post_id, '_dm_structured_data');
+        delete_post_meta($post_id, '_datamachine_structured_data');
         
         wp_send_json_success([
             'message' => 'Structured data deleted',
@@ -280,7 +285,7 @@ class DataMachineStructuredData_AdminPage {
         switch ($action) {
             case 'delete':
                 foreach ($post_ids as $post_id) {
-                    delete_post_meta($post_id, '_dm_structured_data');
+                    delete_post_meta($post_id, '_datamachine_structured_data');
                     $results[] = $post_id;
                 }
                 wp_send_json_success([
@@ -291,7 +296,7 @@ class DataMachineStructuredData_AdminPage {
                 
             case 'reanalyze':
                 // Verify pipeline exists for bulk operations
-                $pipeline_service = new DM_StructuredData_CreatePipeline();
+                $pipeline_service = new DataMachine_StructuredData_CreatePipeline();
                 if (!$pipeline_service->pipeline_exists()) {
                     wp_send_json_error('Structured data pipeline not found. Please create the pipeline first.');
                     break;
@@ -349,7 +354,7 @@ class DataMachineStructuredData_AdminPage {
             do_action('datamachine_log', 'debug', 'Instantiating CreatePipeline service');
             
             // Use dedicated service for pipeline creation
-            $pipeline_service = new DM_StructuredData_CreatePipeline();
+            $pipeline_service = new DataMachine_StructuredData_CreatePipeline();
             
             do_action('datamachine_log', 'debug', 'Calling create_pipeline method');
             $result = $pipeline_service->create_pipeline();

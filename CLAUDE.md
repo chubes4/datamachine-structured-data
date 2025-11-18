@@ -6,17 +6,9 @@ AI-powered semantic analysis extension for Data Machine that enhances WordPress 
 
 ## Migration Status
 
-**Prefix Migration:**
-- Current: Still uses `dm_` prefixes in AJAX actions and meta keys
-- Status: Pending migration to `datamachine_` prefixes
-- Details: See root `/CLAUDE.md` and `/MIGRATION-PLAN.md` for migration patterns
+**Prefix Migration**: ✅ Complete - `datamachine_` prefixes throughout
 
-**REST API Integration:**
-- Integration Method: Filter-based handler registration (no custom REST endpoints needed)
-- Core Endpoint Used: `/datamachine/v1/execute` (automatic integration via `datamachine_handlers` filter)
-- Pattern: DM Structured Data registers handler via filters - Data Machine core handles all REST API operations
-- Documentation: See `/datamachine/docs/api-reference/rest-api-extensions.md` for filter-based integration pattern
-- Note: No custom REST API endpoints required - semantic analysis handler integrates seamlessly with Data Machine execution engine
+**REST API Integration**: Filter-based handler registration via `datamachine_handlers` filter - no custom endpoints needed
 
 ## Architecture Overview
 
@@ -45,7 +37,7 @@ dm-structured-data/
 ### Handler Registration
 - **Handler Type**: `publish` (triggers on content publication)
 - **Handler Key**: `structured_data`
-- **Class**: `DM_StructuredData_Handler`
+- **Class**: `DataMachine_StructuredData_Handler`
 
 ### AI Tool Registration
 - **Tool Name**: `save_semantic_analysis`
@@ -60,7 +52,7 @@ dm-structured-data/
 
 ## Key Classes
 
-### DM_StructuredData_Handler
+### DataMachine_StructuredData_Handler
 Processes AI tool calls and manages semantic data storage.
 
 **Primary Methods**:
@@ -69,9 +61,9 @@ Processes AI tool calls and manages semantic data storage.
 - `has_structured_data($post_id)` - Checks data existence
 - `needs_update($post_id)` - Validates content freshness
 
-**Data Storage**: WordPress post meta `_dm_structured_data`
+**Data Storage**: WordPress post meta `_datamachine_structured_data`
 
-### DM_StructuredData_CreatePipeline
+### DataMachine_StructuredData_CreatePipeline
 Synchronous pipeline creation service for Data Machine integration.
 
 **Primary Methods**:
@@ -79,7 +71,7 @@ Synchronous pipeline creation service for Data Machine integration.
 - `pipeline_exists()` - Checks if structured data pipeline exists
 - `get_flow_step_id($step_type)` - Gets flow step ID for specific step type
 
-### DM_StructuredData_YoastIntegration
+### DataMachine_StructuredData_YoastIntegration
 Enhances Yoast schema with AI-generated semantic properties.
 
 **Integration Point**: `wpseo_schema_graph` filter
@@ -161,13 +153,13 @@ Plugin automatically:
 1. **Analysis Request**: Admin interface or programmatic trigger
 2. **Post Targeting**: WordPress fetch handler configured for specific post ID
 3. **Pipeline Execution**: Data Machine processes content through AI analysis
-4. **Data Storage**: Semantic metadata saved to `_dm_structured_data` post meta
+4. **Data Storage**: Semantic metadata saved to `_datamachine_structured_data` post meta
 5. **Schema Enhancement**: Yoast schema generation enhanced with `aiEnrichment` properties
 6. **Output**: Enhanced structured data visible to AI crawlers and search engines
 
 ## Admin Interface Features
 
-### DM_StructuredData_AdminPage
+### DataMachine_StructuredData_AdminPage
 Provides comprehensive management interface with:
 
 **Pipeline Management**:
@@ -191,23 +183,25 @@ Provides comprehensive management interface with:
 - Immediate pipeline creation feedback
 
 ### Key AJAX Endpoints
-- `dm_structured_data_create_pipeline` - Create pipeline synchronously
-- `dm_structured_data_analyze` - Analyze individual posts
-- `dm_structured_data_bulk_action` - Bulk operations (delete, reanalyze)
-- `dm_structured_data_search_posts` - Post search functionality
+- `datamachine_structured_data_create_pipeline` - Create pipeline synchronously
+- `datamachine_structured_data_analyze` - Analyze individual posts
+- `datamachine_structured_data_bulk_action` - Bulk operations (delete, reanalyze)
+- `datamachine_structured_data_search_posts` - Post search functionality
+- `datamachine_structured_data_update_field` - Update individual fields
+- `datamachine_structured_data_delete` - Delete structured data
 
 ## Pipeline Creation Implementation
 
 ### CreatePipeline Service Pattern
-- **Service Class**: `DM_StructuredData_CreatePipeline`
+- **Service Class**: `DataMachine_StructuredData_CreatePipeline`
 - **Method**: `create_pipeline()`
 - **Purpose**: Clean, testable pipeline creation with immediate feedback
 - **Benefits**: Synchronous execution, clear error handling, service isolation
 
 ### Pipeline Creation Steps
 1. Check Data Machine dependency availability
-2. Create pipeline using `dm_create_pipeline` filter
-3. Create fetch, AI, and publish steps using `dm_create_step` filters
+2. Create pipeline using `datamachine_create_pipeline` filter
+3. Create fetch, AI, and publish steps using `datamachine_create_step` filters
 4. Get auto-created flow ID from pipeline
 5. Configure AI step with structured data tools
 6. Configure flow handlers for each step type
@@ -215,8 +209,8 @@ Provides comprehensive management interface with:
 
 ### Data Storage
 Pipeline component IDs stored in WordPress options:
-- `dm_structured_data_pipeline_id`: Created pipeline ID
-- `dm_structured_data_flow_id`: Created flow ID
+- `datamachine_structured_data_pipeline_id`: Created pipeline ID
+- `datamachine_structured_data_flow_id`: Created flow ID
 
 ## Pipeline Detection Pattern
 

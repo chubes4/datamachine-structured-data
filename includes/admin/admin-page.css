@@ -4,12 +4,12 @@
  * Styling for the comprehensive structured data admin interface.
  */
 
-.dm-structured-data {
+.datamachine-structured-data {
     max-width: 1200px;
 }
 
 /* Analysis Section */
-.dm-analysis-section {
+.datamachine-analysis-section {
     background: #fff;
     border: 1px solid #ccd0d4;
     padding: 20px;
@@ -17,25 +17,25 @@
     margin-bottom: 20px;
 }
 
-.dm-analysis-section h2 {
+.datamachine-analysis-section h2 {
     margin-top: 0;
     padding-bottom: 10px;
     border-bottom: 1px solid #ddd;
 }
 
-.dm-analysis-controls {
+.datamachine-analysis-controls {
     display: grid;
     grid-template-columns: 2fr 1fr;
     gap: 20px;
     margin: 20px 0;
 }
 
-.dm-analysis-form {
+.datamachine-analysis-form {
     display: grid;
     gap: 15px;
 }
 
-.dm-analysis-status {
+.datamachine-analysis-status {
     background: #fff;
     border: 1px solid #ccd0d4;
     padding: 20px;
@@ -43,7 +43,7 @@
     height: fit-content;
 }
 
-.dm-analysis-status h3 {
+.datamachine-analysis-status h3 {
     margin-top: 0;
     margin-bottom: 15px;
 }
@@ -118,17 +118,17 @@
 }
 
 /* Post Search */
-.dm-post-search {
+.datamachine-post-search {
     position: relative;
     margin-bottom: 15px;
 }
 
-.dm-post-search input[type="text"] {
+.datamachine-post-search input[type="text"] {
     width: 100%;
     min-width: 300px;
 }
 
-.dm-search-results {
+.datamachine-search-results {
     position: absolute;
     top: 100%;
     left: 0;
@@ -208,20 +208,20 @@
 }
 
 /* Data Management Section */
-.dm-data-section {
+.datamachine-data-section {
     background: #fff;
     border: 1px solid #ccd0d4;
     padding: 20px;
     border-radius: 4px;
 }
 
-.dm-data-section h2 {
+.datamachine-data-section h2 {
     margin-top: 0;
     padding-bottom: 10px;
     border-bottom: 1px solid #ddd;
 }
 
-.dm-data-controls {
+.datamachine-data-controls {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -229,12 +229,12 @@
     gap: 15px;
 }
 
-.dm-data-search {
+.datamachine-data-search {
     flex: 1;
     max-width: 300px;
 }
 
-.dm-bulk-actions {
+.datamachine-bulk-actions {
     display: flex;
     align-items: center;
     gap: 10px;
@@ -309,7 +309,7 @@
     margin: 0;
 }
 
-.dm-results-actions {
+.datamachine-results-actions {
     display: flex;
     gap: 10px;
     padding-top: 15px;
@@ -386,17 +386,17 @@
 
 /* Responsive Design */
 @media (max-width: 1024px) {
-    .dm-test-container {
+    .datamachine-test-container {
         grid-template-columns: 1fr;
     }
     
-    .dm-results-grid {
+    .datamachine-results-grid {
         grid-template-columns: 1fr;
     }
 }
 
 @media (max-width: 768px) {
-    .dm-results-actions {
+    .datamachine-results-actions {
         flex-direction: column;
     }
     
@@ -426,19 +426,19 @@
 }
 
 /* WordPress Admin Integration */
-.dm-structured-data .form-table th {
+.datamachine-structured-data .form-table th {
     width: 150px;
     padding-left: 0;
 }
 
-.dm-structured-data .submit {
+.datamachine-structured-data .submit {
     margin-top: 20px;
     padding-top: 20px;
     border-top: 1px solid #ddd;
 }
 
 /* Notice Enhancements */
-.dm-notice {
+.datamachine-notice {
     margin: 5px 0 15px;
     padding: 1px 12px;
 }
@@ -476,32 +476,32 @@
 
 /* Enhanced Responsive Design */
 @media (max-width: 1024px) {
-    .dm-analysis-controls {
+    .datamachine-analysis-controls {
         grid-template-columns: 1fr;
     }
     
-    .dm-data-controls {
+    .datamachine-data-controls {
         flex-direction: column;
         align-items: stretch;
     }
     
-    .dm-data-search {
+    .datamachine-data-search {
         max-width: none;
     }
 }
 
 @media (max-width: 768px) {
-    .dm-structured-data {
+    .datamachine-structured-data {
         margin: 10px;
     }
     
-    .dm-analysis-section,
-    .dm-data-section {
+    .datamachine-analysis-section,
+    .datamachine-data-section {
         padding: 15px;
         margin-bottom: 15px;
     }
     
-    .dm-bulk-actions {
+    .datamachine-bulk-actions {
         flex-direction: column;
         align-items: stretch;
     }
