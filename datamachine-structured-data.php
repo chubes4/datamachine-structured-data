@@ -142,8 +142,13 @@ class DataMachineStructuredData {
                     'description' => 'Difficulty rating 1-10'
                 ],
                 'estimated_completion_time' => [
-                    'type' => 'integer', 
+                    'type' => 'integer',
                     'description' => 'Implementation time in minutes'
+                ],
+                'job_id' => [
+                    'type' => 'string',
+                    'required' => true,
+                    'description' => 'Job ID for tracking workflow execution'
                 ]
             ]
         ];

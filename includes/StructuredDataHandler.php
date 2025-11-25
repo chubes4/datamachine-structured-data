@@ -20,16 +20,25 @@ class DataMachineStructuredData_Handler {
      * @return array Result with success status, message, and data
      */
     public function handle_tool_call($parameters, $tool_def = []) {
-        $post_id = $this->extract_post_id_from_context($parameters, $tool_def);
-        
+        $job_id = $parameters['job_id'] ?? null;
+        if (!$job_id) {
+            return [
+                'success' => false,
+                'message' => 'job_id parameter is required for structured data analysis'
+            ];
+        }
+
+        $engine_data = datamachine_get_engine_data($job_id);
+        $post_id = $engine_data['post_id'] ?? null;
+
         if (!$post_id) {
-            do_action('datamachine_log', 'error', 'StructuredData Handler: No post ID found', [
-                'parameters_keys' => array_keys($parameters),
-                'tool_def' => $tool_def
+            do_action('datamachine_log', 'error', 'StructuredData Handler: No post_id found in engine data', [
+                'job_id' => $job_id,
+                'engine_data_keys' => array_keys($engine_data)
             ]);
             return [
                 'success' => false,
-                'message' => 'No post ID found in AI tool parameters'
+                'message' => 'No post_id found in engine data. Ensure content was created in previous pipeline step.'
             ];
         }
         

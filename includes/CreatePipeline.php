@@ -45,14 +45,14 @@ class DataMachineStructuredData_CreatePipeline {
                             'post_id' => 0
                         ]
                     ],
-                    [
-                        'step_type' => 'ai',
-                        'execution_order' => 1,
-                        'label' => 'AI Analysis',
-                        'provider' => 'openai',
-                        'model' => 'gpt-5-mini',
-                        'system_prompt' => 'You are an AI assistant that analyzes WordPress content to extract semantic metadata for structured data enhancement. Analyze the content and provide semantic classifications including content_type, audience_level, skill_prerequisites, content_characteristics, primary_intent, actionability, complexity_score, and estimated_completion_time.'
-                    ],
+                     [
+                         'step_type' => 'ai',
+                         'execution_order' => 1,
+                         'label' => 'AI Analysis',
+                         'provider' => 'openai',
+                         'model' => 'gpt-5-mini',
+                         'system_prompt' => 'You are an AI assistant that analyzes WordPress content to extract semantic metadata for structured data enhancement. Analyze the content and provide semantic classifications including content_type, audience_level, skill_prerequisites, content_characteristics, primary_intent, actionability, complexity_score, and estimated_completion_time.'
+                     ],
                     [
                         'step_type' => 'update',
                         'execution_order' => 2,
